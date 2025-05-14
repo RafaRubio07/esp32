@@ -1,0 +1,10 @@
+﻿<Window x:Class="GraficoTemp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        Title="Monitor de Temperatura" Height="400" Width="600">
+    <Grid>
+        <oxy:PlotView x:Name="tempChart" Model="{Binding}" />
+    </Grid>
+</Window>
+
