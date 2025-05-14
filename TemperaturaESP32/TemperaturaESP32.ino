@@ -2,15 +2,15 @@
 #include <HTTPClient.h>
 #include <DHT.h>
 
-#define DHTPIN 4
-#define DHTTYPE DHT11 
+#define DHTPIN 
+#define DHTTYPE DHT 
 
 //Configuração Wi-Fi
 const char* ssid = "";
 const char* password ="";
 
 //conexão ThingSpeak
-const char* serverUrl = "https://www.thingspeak.mathwors.com/channels/2954614/private_show";
+const char* serverUrl = "https://www.thingspeak.mathwors.com/channels/2954614";
 const char* apiKey = "YBYGJDXWAISSTTNZ";
 
 DHT dht (DHTPIN, DHTTYPE);
@@ -60,5 +60,5 @@ void loop() {
     Serial.println("Wi-Fi desconectado");
   }
 
-  delay(60000); //Atualiza a cada minuto
+  delay(15000); //Atualiza a cada minuto
 }
