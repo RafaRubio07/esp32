@@ -1,64 +1,55 @@
-#include <wifi.h>
-#include <HTTPClient.h>
+#include <WiFi.h>
 #include <DHT.h>
+#include <HTTPClient.h>
 
-#define DHTPIN 
-#define DHTTYPE DHT 
+#define DHTPIN 4
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
 
-//Configuração Wi-Fi
-const char* ssid = "";
-const char* password ="";
-
-//conexão ThingSpeak
-const char* serverUrl = "https://www.thingspeak.mathwors.com/channels/2954614";
+const char* ssid = "My_House_1";
+const char* password = "rafa2210";
+const char* server = "api.thingspeak.com";
 const char* apiKey = "YBYGJDXWAISSTTNZ";
 
-DHT dht (DHTPIN, DHTTYPE);
-
-
-void setup() {
-  Serial.begin ();
+void setup(){
+  Serial.begin(115200);
   dht.begin();
 
-  //conectando no Wi-Fi
   WiFi.begin(ssid, password);
-  Serial.print("Conectando ao Wi-fi");
-  while (WiFi.Status() != WL_CONNECTED){
-    delay(500);
-    Serial.print(".");
+  while (WiFi.status() != WL_CONNECTED){
+    delay(1000);
+    Serial.println("Conectando ao WiFi...");
   }
-  Serial.println("\nConectado!");
+  Serial.println("Conectado");
 }
 
-void loop() {
-  float temperature = dht.readTemperature();
+void loop(){
+  float t = dht.readTemperature();
 
-  if (isnan(temperature)) {
-    Serial.println("Erro ao ler sensor!");
-    delay(2000);
+  if (isnan(t)){
+    Serial.println("Falha ao ler o sensor");
     return;
   }
-
-  Serial.print("Temperatura: ");
-  Serial.println(temperature);
-
-  if (Wifi.status()== WL_CONNECTED){
+  if (WiFi.status() == WL_CONNECTED){
     HTTPClient http;
-    String url = String(serverUrl) + "?api_key=" + apikey + "&field=" + String(temperature);
+    String url = String("http://api.thingspeak.com/update?api_key=") + apiKey + "&field1=" + String(t);
 
+    http.begin(url);
     int httpResponseCode = http.GET();
 
     if (httpResponseCode > 0){
-      Serial.println("Dados enviados com sucesso");
-      Serial.println(http.getString());
+      String payload = http.getString();
+      Serial.println(httpResponseCode);
+      Serial.println(payload);
     } else{
-      Serial.println("Erro ao enviar os dados");
+      Serial.print("Erro na requisição: ");
+      Serial.println(httpResponseCode);
     }
 
     http.end();
   } else {
-    Serial.println("Wi-Fi desconectado");
+    Serial.println("Erro na conexão");
   }
 
-  delay(15000); //Atualiza a cada minuto
+  delay(15000);
 }
