@@ -9,7 +9,7 @@ DHT dht(DHTPIN, DHTTYPE);
 const char* ssid = "My_House_1";
 const char* password = "rafa2210";
 const char* server = "api.thingspeak.com";
-const char* apiKey = "YBYGJDXWAISSTTNZ";
+const char* apiKey = "1N1X0EGTW2JQAAZI";
 
 void setup(){
   Serial.begin(115200);
